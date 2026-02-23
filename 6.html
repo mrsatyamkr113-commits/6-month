@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 Months of Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@200;400;600&family=Playfair+Display:ital,wght@1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --burgundy: #4a0404;
+            --deep-gold: #b8860b;
+            --soft-gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Ambient Background */
+        #canvas-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #2b0101 0%, #000 100%);
+            z-index: -2;
+        }
+
+        /* Custom Magic Cursor */
+        #cursor {
+            position: fixed; width: 15px; height: 15px; background: var(--soft-gold);
+            border-radius: 50%; pointer-events: none; z-index: 10000;
+            box-shadow: 0 0 20px var(--soft-gold); mix-blend-mode: difference;
+        }
+
+        /* Page System */
+        .page {
+            position: absolute; width: 100%; height: 100%;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 30px;
+        }
+        .active { display: flex; animation: cinematicFade 2s ease-in-out forwards; }
+
+        @keyframes cinematicFade {
+            0% { opacity: 0; filter: blur(15px); transform: scale(1.1) translateY(20px); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); }
+        }
+
+        /* Luxury Elements */
+        h1 { font-family: 'Great Vibes', cursive; font-size: 5rem; color: var(--soft-gold); margin-bottom: 20px; }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 50px; border-radius: 10px;
+            max-width: 800px; width: 95%;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .paragraph-text {
+            font-size: 1.1rem; line-height: 2.2; font-weight: 300;
+            text-align: center; color: #f2f2f2;
+        }
+
+        /* 3D Floating Frame */
+        .royal-frame {
+            width: 320px; height: 420px; background: white;
+            padding: 15px 15px 60px 15px;
+            box-shadow: 0 50px 80px rgba(0,0,0,0.9);
+            transform: rotate(-3deg);
+            transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 30px;
+        }
+        .royal-frame:hover { transform: rotate(0deg) scale(1.05); }
+        .royal-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Golden Button */
+        .btn-luxe {
+            margin-top: 40px; padding: 20px 60px;
+            background: transparent; border: 1px solid var(--soft-gold);
+            color: var(--soft-gold); font-family: 'Montserrat';
+            letter-spacing: 5px; font-weight: 600; text-transform: uppercase;
+            transition: 0.5s; position: relative; overflow: hidden;
+        }
+        .btn-luxe:hover { background: var(--soft-gold); color: #000; box-shadow: 0 0 50px rgba(212, 175, 55, 0.4); }
+
+        /* Flower Clicking Interaction */
+        .flower-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 20px; }
+        .flower-btn {
+            font-size: 80px; transition: 0.5s; 
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+        }
+        .flower-btn:hover { transform: scale(1.3); }
+        .reveal-anim { font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: var(--soft-gold); animation: popUp 0.6s forwards; }
+        
+        @keyframes popUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <canvas id="canvas-bg"></canvas>
+    
+    <audio id="music" loop>
+        <source src="I_Love_you_-_Ash_King___Clinton_Cerejo__Lyrics____Lyrical_Bam_Hindi(256k).mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="page active" id="p1">
+        <h1>Welcome Babuu...</h1>
+        <p style="letter-spacing: 10px; color: #aaa;">hnjiii babuu aagaii aap</p>
+        <button class="btn-luxe" onclick="start()">Aage dekho kya hai...</button>
+    </div>
+
+    <div class="page" id="p2">
+        <div class="glass-card">
+            <h2 style="font-family: 'Great Vibes'; font-size: 3rem; color: var(--soft-gold); margin-bottom: 25px;">just ye sab aapke liye</h2>
+            <p id="typewriter" class="paragraph-text"></p>
+        </div>
+        <button class="btn-luxe" onclick="nextPage(3)">Aage Chalo ❤️</button>
+    </div>
+
+    <div class="page" id="p3">
+        <div class="royal-frame">
+            <img src="IMG_20260223_213108.jpg" alt="Our Memory">
+        </div>
+        <h2 style="font-weight: bold; font-size: 3rem; letter-spacing: 5px;">YOU WILL BE MINE</h2>
+        <p style="color: var(--soft-gold); font-weight: 300;">Is pic ko reality banaa na hai babuuu</p>
+        <button class="btn-luxe" onclick="nextPage(4); changeRain()">Next Surprise ✨</button>
+    </div>
+
+    <div class="page" id="p4">
+        <div class="flower-grid" id="fBox"></div>
+        <div id="msgDisplay" style="margin-top: 40px; min-height: 40px;"></div>
+        <button class="btn-luxe" id="lastStep" style="display:none;" onclick="nextPage(5); celebrate()">Final Step 🎁</button>
+    </div>
+
+    <div class="page" id="p5">
+        <img src="a08232c97cbe65e4618e2f54b7cd7e9e.gif" width="350" style="border: 2px solid var(--soft-gold); border-radius: 20px;">
+        <h1>i love you too muuuuuuccchhhhhhhhhhh betuuuuu 🫶🫶🫶🫂🫂😘</h1>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let rain = [];
+        let type = 'flower';
+
+        function initRain() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            for(let i=0; i<40; i++) {
+                rain.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    s: Math.random() * 20 + 15,
+                    v: Math.random() * 2 + 1,
+                    c: ['🌷', '🌸', '🌺', '🪷'][Math.floor(Math.random()*4)]
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            rain.forEach(r => {
+                ctx.font = r.s + 'px serif';
+                ctx.fillText(r.c, r.x, r.y);
+                r.y += r.v;
+                if(r.y > canvas.height) r.y = -20;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        function start() {
+            document.getElementById('music').play();
+            nextPage(2);
+            typeMsg();
+        }
+
+        function nextPage(n) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('p'+n).classList.add('active');
+            if(n === 4) loadFlowers();
+        }
+
+        function typeMsg() {
+            const text = `aapko pta hai babuu aap meri life Bilkul Angel ki trah aai ho jab muje kisi or ki jarurat tha tab hi bilkul perfect time pe first time muje baat krne me lga nhi ki ittna kuch hoga sab aate hai use krke jate hain but aap bilkul fix ho mera liye aap Angel aap mano ya na mano hum dono ke bich bahut si problem aai lekin face kiye usko or solve kiye aage bhi aasie hi krenge or ye jo hua larai yrrrrr dil se sorry ye word nhi emotion hai or ye dubara nhi hoga trust it aap mera liye sab kuch ho aapse baat krke sab kuch bhul jata hu sab kuch kitna bhi problem ho aapse baat hone ke baad lagta hai chalo theek hai jo bhi problem hai solve ho hi jayga har time aap mujse support krti ho har chij me i hateeeeeee youu betuuuuuuu 🫶🫶🫶`;
+            let i = 0;
+            const el = document.getElementById('typewriter');
+            function t() {
+                if(i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(t, 40); }
+            }
+            t();
+        }
+
+        function loadFlowers() {
+            const box = document.getElementById('fBox');
+            box.innerHTML = '';
+            const msgs = [
+                "You are the bestest part of my life ❤️",
+                "You make my world brighter every day ✨",
+                "Life feels perfect when I’m with you 💫",
+                "You are my favorite person, always 😊",
+                "My heart feels safe with you 💖",
+                "You are the reason behind my happiest smiles 😌"
+            ];
+            let count = 0;
+            msgs.forEach((m, i) => {
+                const d = document.createElement('div');
+                d.className = 'flower-btn';
+                d.innerHTML = '🌺';
+                d.onclick = () => {
+                    d.style.display = 'none';
+                    document.getElementById('msgDisplay').innerHTML = `<p class="reveal-anim">${m}</p>`;
+                    count++;
+                    confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 }, colors: ['#d4af37', '#ff4d6d'] });
+                    if(count === 6) document.getElementById('lastStep').style.display = 'inline-block';
+                };
+                box.appendChild(d);
+            });
+        }
+
+        function changeRain() {
+            rain.forEach(r => r.c = ['❤️', '💖', '💝', '💕'][Math.floor(Math.random()*4)]);
+        }
+
+        function celebrate() {
+            var end = Date.now() + (10 * 1000);
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#d4af37', '#ff4d6d'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#d4af37', '#ff4d6d'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        initRain();
+        draw();
+    </script>
+</body>
+</html>
+ 
